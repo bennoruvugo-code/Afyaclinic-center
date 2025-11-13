@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Afyaclinic Center</title>
+<style>
+  :root{
+    --bg:#f0f8ff;
+    --card:#ffffff; 
+    --text:#1f2937;
+    --muted:#6b7280;
+    --brand:#004080;
+    --brand-2:#0ea5e9;
+    --brand-3:#19a7ff;
+    --shadow:0 8px 24px rgba(0,0,0,.08);
+  }
+  body.dark{
+    --bg:#0b1220;
+    --card:#0f172a;
+    --text:#e5e7eb;
+    --muted:#a3a3a3;
+    --brand:#1e3a8a;
+    --brand-2:#38bdf8;
+    --brand-3:#60a5fa;
+    --shadow:0 8px 28px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background:var(--bg); color:var(--text);
+  }
+
+  /* NAV */
+  .navbar{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(90deg,var(--brand), #002a66);
+    color:#fff; box-shadow:var(--shadow);
+  }
+  .nav-wrap{
+    max-width:1100px; margin:auto; display:flex; align-items:center; gap:16px;
+    padding:12px 20px;
+  }
+  .logo{font-weight:800; letter-spacing:.3px; font-size:20px}
+  .nav-links{margin-left:auto; display:flex; gap:14px; flex-wrap:wrap}
+  .nav-links a{
+    color:#fff; text-decoration:none; padding:8px 10px; border-radius:10px; font-size:14px;
+    transition:transform .2s, background .2s;
+  }
+  .nav-links a:hover{ background:rgba(255,255,255,.12); transform:translateY(-1px) }
+  .controls{display:flex; gap:10px; align-items:center}
+  .btn{
+    padding:8px 12px; border:none; border-radius:999px; cursor:pointer;
+    background:#ffffff10; color:#fff; backdrop-filter: blur(6px);
+  }
+  .btn:hover{ background:#ffffff20 }
+
+  /* HERO */
+  .hero{
+    position:relative; height:420px; display:grid; place-items:center; overflow:hidden;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0;
+    background-size:cover; background-position:center;
+    transition:opacity 0s ease-in-out, background-image 2s;
+    opacity:1;
+  }
+  .hero::after{
+    content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,.2), rgba(0,0,0,.55));
+  }
+  .hero-content{
+    position:relative; z-index:1; max-width:900px; padding:0 20px; text-align:center;
+    color:#fff;
+  }
+  .headline{
+    display:inline-block;
+    font-weight:800; font-size:clamp(22px,4vw,34px);
+    line-height:1.2; border-radius:16px; padding:12px 18px;
+    background:linear-gradient(90deg, #00000055, #00000020);
+    animation:fadeUp .3s ease both;
+  }
+  .hero-ctas{ margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap }
+  .cta{
+    border:none; cursor:pointer; border-radius:12px; padding:10px 14px; font-weight:700;
+    transition:transform 15s, background .2s, color .2s; box-shadow:var(--shadow)
+  }
+  .cta.primary{ background:var(--brand-3); color:#002244 }
+  .cta.primary:hover{ transform:translateY(-2px) }
+  .cta.ghost{ background:#ffffff20; color:#fff; }
+  .cta.ghost:hover{ background:#ffffff35; transform:translateY(-2px) }
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(18px)}
+    to{opacity:1; transform:translateY(0)}
+  }
+  .pulse{ animation:pulseText .9s ease-in-out }
+  @keyframes pulseText{
+    0%{transform:translateY(8px); opacity:.2}
+    100%{transform:translateY(0); opacity:1}
+  }
+
+  /* LAYOUT */
+  main{ max-width:1100px; margin:0 auto; padding:28px 16px }
+  section{ margin:30px 0 }
+  h2{ color:var(--brand); margin:0 0 14px; font-size:clamp(18px,3vw,24px) }
+  .grid{ display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)) }
+  .card{
+    background:var(--card); border-radius:16px; padding:16px; box-shadow:var(--shadow);
+    transition:transform .15s, box-shadow .2s;
+  }
+  .card:hover{ transform:translateY(-3px) }
+
+  /* SEARCH */
+  .searchbar{ display:flex; gap:10px; margin:8px 0 16px }
+  .searchbar input{
+    flex:1; padding:12px 14px; border-radius:12px; border:1px solid #00000015; outline:none;
+    background:var(--card); color:var(--text);
+  }
+  .searchbar button{ border:none; border-radius:12px; padding:12px 14px; background:var(--brand); color:#fff; cursor:pointer }
+  .pill{ display:inline-block; padding:6px 10px; border-radius:999px; background:#00000010; font-size:12px; color:var(--muted) }
+
+  /* FAQ */
+  details{
+    background:var(--card); padding:14px 16px; border-radius:12px; box-shadow:var(--shadow);
+  }
+  details + details{ margin-top:10px }
+
+  /* NEWS */
+  .news .item h3{ margin:0 0 8px; font-size:16px }
+  .news .item p{ margin:0; color:var(--muted); font-size:14px }
+
+  /* GALLERY */
+  .gallery img{
+    width:100%; height:180px; object-fit:cover; border-radius:12px; box-shadow:var(--shadow);
+    transition:transform .2s; background:#00000010;
+  }
+  .gallery img:hover{ transform:scale(1.02) }
+
+  /* MAP */
+  .map iframe{ width:100%; height:320px; border:0; border-radius:16px; box-shadow:var(--shadow) }
+
+  /* FOOTER */
+  footer{
+    margin-top:36px; background:linear-gradient(90deg,var(--brand), #002a66);
+    color:#fff; padding:20px 16px; text-align:center;
+  }
+  footer a{ color:#cde9ff; text-decoration:none; margin:0 8px }
+
+  /* CHAT */
+  .chat-btn{
+    position:fixed; right:18px; bottom:18px; width:56px; height:56px; border-radius:50%;
+    display:grid; place-items:center; border:none; cursor:pointer; color:#fff; font-size:22px;
+    background:linear-gradient(180deg, var(--brand-2), var(--brand)); box-shadow:var(--shadow); z-index:60;
+  }
+  .chat-box{
+    position:fixed; right:18px; bottom:84px; width:280px; height:340px; display:none; flex-direction:column;
+    background:var(--card); border-radius:16px; box-shadow:var(--shadow); overflow:hidden; z-index:60;
+  }
+  .chat-header{ background:var(--brand); color:#fff; padding:10px 12px; font-weight:700 }
+  .chat-body{ padding:10px; overflow:auto; flex:1; font-size:14px }
+  .msg{ margin:6px 0; }
+  .bot{ color:var(--brand) }
+  .user{ text-align:right; color:var(--muted) }
+  .chat-input{ display:flex; gap:6px; padding:10px; border-top:1px solid #00000015 }
+  .chat-input input{ flex:1; padding:8px 10px; border-radius:10px; border:1px solid #00000020; background:var(--bg); color:var(--text) }
+  .chat-input button{ padding:8px 10px; border:none; border-radius:10px; background:var(--brand); color:#fff; cursor:pointer }
+
+  /* RESPONSIVE */
+  @media (max-width:720px){
+    .nav-links{ display:none }
+    .hero{ height:360px }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="navbar">
+  <div class="nav-wrap">
+    <div class="logo">Afyaclinic Center.</div>
+    <nav class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#huduma">Huduma</a>
+      <a href="#madaktari">Madaktari</a>
+      <a href="#elimu">Elimu ya Afya</a>
+      <a href="#news">Habari</a>
+      <a href="#mawasiliano">Mawasiliano</a>
+    </nav>
+    <div class="controls">
+      <button id="darkToggle" class="btn" title="Dark / Light">🌙</button>
+      <a class="btn" href="tel:112" title="Emergency Call">🚑 Dharura</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home" aria-label="Hero banner">
+  <div class="hero-content">
+    <div id="headline" class="headline">
+      Karibu Hospitali ya Afyaclinic Center – Huduma Bora Kwa Kila Mgonjwa
+    </div>
+    <div class="hero-ctas">
+      <a href="#book" class="cta primary">📅 Book Appointment</a>
+      <a href="tel:112" class="cta ghost">🚨 Emergency Call</a>
+    </div>
+  </div>
+</section>
+
+<main>
+  <!-- SEARCH -->
+  <section aria-labelledby="search-title">
+    <h2 id="search-title">Tafuta Huduma hapa!</h2>
+    <div class="searchbar">
+      <input id="searchInput" type="search" placeholder="Tafuta huduma, daktari, kipimo, neno lolote…" aria-label="Tafuta"/>
+      <button id="searchBtn">Tafuta</button>
+    </div>
+    <small class="pill">Mfano: “telemedicine”, “chanjo”, “cardiology”</small>
+  </section>
+
+  <!-- HUDUMA -->
+  <section id="huduma" aria-labelledby="huduma-title">
+    <h2 id="huduma-title">Huduma Zetu Kuu</h2>
+    <div class="grid" id="services">
+      <article class="card" data-keywords="appointment booking clinic outpatient">
+        <h3>Online Appointment</h3>
+        <p>Panga miadi kwa haraka mtandaoni.</p>
+      </article>
+      <article class="card" data-keywords="telemedicine video call consult">
+        <h3>Telemedicine</h3>
+        <p>Ongea na daktari kwa simu au video.</p>
+      </article>
+      <article class="card" data-keywords="laboratory tests results portal">
+        <h3>Maabara & Matokeo</h3>
+        <p>Pata matokeo kupitia portal ya mgonjwa.</p>
+      </article>
+      <article class="card" data-keywords="insurance nhif claims">
+        <h3>Uhifadhi wa Bima</h3>
+        <p>NHIF na bima binafsi zinakaribishwa.</p>
+      </article>
+      <article class="card" data-keywords="maternity pediatrics">
+        <h3>Uzazi & Watoto</h3>
+        <p>Huduma za kina mama na watoto.</p>
+      </article>
+      <article class="card" data-keywords="cardiology heart ecg">
+        <h3>Cardiology</h3>
+        <p>Huduma za moyo, ECG na ufuatiliaji.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- MADAKTARI -->
+  <section id="madaktari" aria-labelledby="madaktari-title">
+    <h2 id="madaktari-title">Madaktari Wetu</h2>
+    <div class="grid" id="doctors">
+      <article class="card" data-keywords="dr amina pediatrics watoto">
+        <h3>Dr. Amina — Pediatrics</h3><p>Utaalam: afya ya watoto.</p>
+      </article>
+      <article class="card" data-keywords="dr joseph cardiology moyo">
+        <h3>Dr. Joseph — Cardiology</h3><p>Utaalam: magonjwa ya moyo.</p>
+      </article>
+      <article class="card" data-keywords="dr neema obgyn uzazi">
+        <h3>Dr. Neema — OBGYN</h3><p>Utaalam: uzazi & afya ya mwanamke.</p>
+      </article>
+      <article class="card" data-keywords="dr baraka general physician kliniki">
+        <h3>Dr. Baraka — General</h3><p>Uchunguzi & tiba za jumla.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section aria-labelledby="testi-title">
+    <h2 id="testi-title">Maoni ya Wagonjwa</h2>
+    <div class="grid testimonials">
+      <div class="card">“Huduma bora na za haraka kabisa.” — <b>Asha</b></div>
+      <div class="card">“Telemedicine imenisaidia sana.” — <b>John</b></div>
+      <div class="card">“Wauguzi wanajali mno. Asanteni.” — <b>Neema</b></div>
+    </div>
+  </section>
+
+ <!-- MAKALA & ARTICLES -->
+<section id="huduma" aria-labelledby="huduma-title">
+    <h2 id="makala-title">Makala zetu kuu.</h2>
+    <div class="grid" id="makala">
+      <article class="card" data-keywords="makala">
+        
+        <h2> Hospitali ya Rufaa ya Mkoa ya Manyara</h2>
+        <p>Inatoa makala kuhusu huduma za kibingwa, matibabu ya macho, na huduma katika wodi mahututi.</p>
+      <a href="https://manyararrh.go.tz/makala-afya?utm_source=chatgpt.com" target="_blank">Soma Zaidi</a>
+      </article>
+      
+      <article class="card" data-keywords="makala">
+        <h3>Afya Habari – Jarida la Mwezi Januari 2025</h3>
+    <p>Linajadili vifo vinavyotokana na magonjwa ya moyo, ushirikiano kati ya Tanzania na Korea, na juhudi za kupambana na magonjwa ya moyo.</p>
+    <a href="https://www.moh.go.tz/storage/app/uploads/public/67b/5a3/d1d/67b5a3d1df56a233679379.pdf?utm_source=chatgpt.com" target="_blank">Soma Zaidi</a>
+  
+        </article>
+      
+      <article class="card" data-keywords="makala">
+       <h4>Mapinduzi Sekta ya Afya katika Miaka 3 ya Rais Samia</h4>
+    <p>Muhtasari wa maboresho yaliyofanyika katika sekta ya afya, ikiwa ni pamoja na ujenzi wa miundombinu ya huduma za afya.</p>
+    <a href="https://www.moh.go.tz/storage/app/uploads/public/65f/c0d/f48/65fc0df483fa4220671055.pdf?utm_source=chatgpt.com" target="_blank">Soma Zaidi</a>
+  </h3>
+         </article>
+     
+         <article class="card" data-keywords="makala">
+        <h5>Matumizi ya Kiswahili katika Mfumo wa Huduma za Afya</h5>
+    <p>Inachunguza matumizi ya Kiswahili katika utoaji wa huduma za afya nchini Tanzania na athari zake kwa wahusika.</p>
+    <a href="https://www.researchgate.net/publication/382801564_Matumizi_ya_Kiswahili_katika_Mfumo_wa_Huduma_za_Afya?utm_source=chatgpt.com" target="_blank">Soma Zaidi</a>
+  </article>
+
+  <article class="card" data-keywords="makala">
+    <h3>Hospitali ya Rufaa ya Mkoa ya Manyara</h3>
+    <p>Inatoa makala kuhusu huduma za kibingwa, matibabu ya macho, na huduma katika wodi mahututi.</p>
+    <a href="https://manyararrh.go.tz/makala-afya?utm_source=chatgpt.com" target="_blank">Soma Zaidi</a>
+  </article>
+
+  <article class="card" data-keywords="makala">
+    <h3>Afya Habari – Jarida la Mwezi Januari 2025</h3>
+    <p>Linajadili vifo vinavyotokana na magonjwa ya moyo, ushirikiano kati ya Tanzania na Korea, na juhudi za kupambana na magonjwa ya moyo.</p>
+    <a href="https://www.moh.go.tz/storage/app/uploads/public/67b/5a3/d1d/67b5a3d1df56a233679379.pdf?utm_source=chatgpt.com" target="_blank">Soma Zaidi</a>
+  </article>
+
+  <article class="card" data-keywords="makala">
+    <h3>Mapinduzi Sekta ya Afya katika Miaka 3 ya Rais Samia</h3>
+    <p>Muhtasari wa maboresho yaliyofanyika katika sekta ya afya, ikiwa ni pamoja na ujenzi wa miundombinu ya huduma za afya.</p>
+    <a href="https://www.moh.go.tz/storage/app/uploads/public/65f/c0d/f48/65fc0df483fa4220671055.pdf?utm_source=chatgpt.com" target="_blank">Soma Zaidi</a>
+  </article>
+
+  <article class="card" data-keywords="makala">
+    <h3>Matumizi ya Kiswahili katika Mfumo wa Huduma za Afya</h3>
+    <p>Inachunguza matumizi ya Kiswahili katika utoaji wa huduma za afya nchini Tanzania na athari zake kwa wahusika.</p>
+    <a href="https://www.researchgate.net/publication/382801564_Matumizi_ya_Kiswahili_katika_Mfumo_wa_Huduma_za_Afya?utm_source=chatgpt.com" target="_blank">Soma Zaidi</a>
+  </article>
+
+  <article class="card" data-keywords="makala">
+    <h3>The $1bn Gold Mine Bringing Death to Desperate Villagers</h3>
+    <p>Inachunguza athari za mgodi wa dhahabu wa North Mara, ukiwemo ukiukaji wa haki za binadamu na athari kwa jamii.</p>
+    <a href="https://www.thetimes.co.uk/article/tanzania-gold-mining-cblg309sz?utm_source=chatgpt.com" target="_blank">Soma Zaidi</a>
+  </article>
+</section>
+
+<!-- NEWS & EVENTS -->
+  <section id="news" aria-labelledby="news-title">
+    <h2 id="news-title">Habari & Matukio</h2>
+    <div class="grid news">
+      <div class="card item">
+        <h3>🩺 Wiki ya Uchunguzi wa Shinikizo</h3>
+        <p>11–15 Septemba · Pima bila malipo.</p>
+      </div>
+      <div class="card item">
+        <h3>💉 Kampeni ya Chanjo</h3>
+        <p>20 Septemba · Watoto 0–5 yrs.</p>
+      </div>
+      <div class="card item">
+        <h3>🧠 Elimu ya Afya ya Akili</h3>
+        <p>5 Oktoba · Ukumbi mkuu wa hospitali.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section aria-labelledby="faq-title">
+    <h2 id="faq-title">Maswali ya Mara kwa Mara</h2>
+    <details>
+      <summary>Mnaukubali NHIF na bima nyingine?</summary>
+      <p>Ndiyo — NHIF, Jubilee, AAR, n.k.</p>
+    </details>
+    <details>
+      <summary>Malipo ya dharura hufanyikaje?</summary>
+      <p>Wasiliana nasi kupitia 112 au dawati la mapokezi; wagonjwa wa dharura hutangulizwa.</p>
+    </details>
+    <details>
+      <summary>Nawezaje kuweka miadi?</summary>
+      <p>Bofya “Book Appointment” juu au piga simu dawati la miadi.</p>
+    </details>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery" aria-labelledby="gal-title">
+    <h2 id="gal-title">Picha za Huduma Yetu</h2>
+    <div class="grid">
+      <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=800&q=80" alt="Hospitali"/>
+      <img src="https://images.unsplash.com/photo-1580281657521-9bfa0f1c57d2?auto=format&fit=crop&w=800&q=80" alt="Daktari"/>
+      <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=800&q=80" alt="Wauguzi"/>
+      <img src="https://images.unsplash.com/photo-1584433230174-23f77c2b3d4b?auto=format&fit=crop&w=800&q=80" alt="Maabara"/>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section id="book" aria-labelledby="nl-title">
+    <h2 id="nl-title">Jiunge na Jarida Letu</h2>
+    <div class="card" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+      <input id="nlEmail" type="email" placeholder="Barua pepe yako" style="flex:1; padding:12px; border-radius:12px; border:1px solid #00000020; background:var(--bg); color:var(--text)"/>
+      <button id="nlBtn" class="cta primary">Subscribe</button>
+      <span id="nlMsg" class="pill" aria-live="polite"></span>
+    </div>
+  </section>
+
+ <!-- Book Appointment Form -->
+  <section class="appointment" id="appointment">
+    <h2>Fanya Book Appointment</h2>
+    <form>
+      <input type="text" placeholder="Jina Kamili" required>
+      <input type="number" placeholder="Umri" required>
+      <select required>
+        <option value="">Chagua Huduma</option>
+        <option value="general">Huduma ya Jumla</option>
+        <option value="children">Huduma ya Watoto</option>
+        <option value="maternity">Uzazi & Wajawazito</option>
+        <option value="lab">Vipimo vya Maabara</option>
+      </select>
+      <input type="date" required>
+      <input type="tel" placeholder="Namba ya Simu" required>
+      <textarea placeholder="Maelezo ya Ziada"></textarea>
+      <button type="submit">Tuma Ombi</button>
+    </form>
+  </section>
+
+ <!-- insuarance ragistration -->
+  <div class="form-container">
+    <h2>Usajili wa Bima ya Afya</h2>
+    <form id="insuranceForm">
+      <div class="form-group">
+        <label for="fullname">Jina Kamili</label>
+        <input type="text" id="fullname" name="fullname" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Namba ya Simu</label>
+        <input type="tel" id="phone" name="phone" placeholder="0712345678" required>
+        <div class="error" id="phoneError"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Barua Pepe</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="insuranceType">Aina ya Bima</label>
+        <select id="insuranceType" name="insuranceType" required>
+          <option value="">--Chagua--</option>
+          <option value="NHIF">NHIF</option>
+          <option value="Private">Private Insurance</option>
+          <option value="Other">Nyingine</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="policyNumber">Namba ya Kadi ya Bima</label>
+        <input type="text" id="policyNumber" name="policyNumber" required>
+      </div>
+
+      <div class="form-group">
+        <label for="startDate">Tarehe ya Kuanza Bima</label>
+        <input type="date" id="startDate" name="startDate" required>
+      </div>
+
+      <div class="form-group">
+        <label for="endDate">Tarehe ya Kumalizika Bima</label>
+        <input type="date" id="endDate" name="endDate" required>
+        <div class="error" id="dateError"></div>
+      </div>
+
+      <button type="submit" class="btn">Wasilisha</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("insuranceForm");
+    const phoneInput = document.getElementById("phone");
+    const startDate = document.getElementById("startDate");
+    const endDate = document.getElementById("endDate");
+    const phoneError = document.getElementById("phoneError");
+    const dateError = document.getElementById("dateError");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      let valid = true;
+
+      // Validate phone number (must be 10 digits)
+      const phonePattern = /^[0-9]{10}$/;
+      if (!phonePattern.test(phoneInput.value)) {
+        phoneError.textContent = "⚠ Namba ya simu lazima iwe na tarakimu 10 (mfano: 0712345678)";
+        valid = false;
+      } else {
+        phoneError.textContent = "";
+      }
+
+      // Validate date (end date must be after start date)
+      if (new Date(endDate.value) <= new Date(startDate.value)) {
+        dateError.textContent = "⚠ Tarehe ya kumalizika lazima iwe baada ya tarehe ya kuanza";
+        valid = false;
+      } else {
+        dateError.textContent = "";
+      }
+
+      if (valid) {
+        alert("✅ Usajili wa bima umefanikiwa!");
+        form.reset();
+      }
+    });
+  </script>
+
+  <!-- MAP -->
+  <section class="map" id="mawasiliano" aria-labelledby="map-title">
+    <h2 id="map-title">Tunapatikana Wapi</h2>
+    <div class="card">
+      <iframe
+        title="Afyaclinic Center Location"
+        src="https://www.google.com/maps?q=hospital&output=embed"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <p style="margin-top:10px">
+        Mawasiliano: <a href="tel:+255700000000">+255 700 000 000</a> ·
+        <a href="mailto:info@afyaclinic.tz">info@afyaclinic.tz</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>© 2025 Afyaclinic Center · Haki Zote Zimehifadhiwa</div>
+  <div>
+    <a href="#privacy">Privacy</a> | <a href="#terms">Terms</a> | <a href="tel:112">Emergency</a>
+  </div>
+
+  <div class="social-icons">
+    <a href="#">🌐 Facebook</a>
+    <a href="#">🐦 Twitter</a>
+    <a href="#">📸 Instagram</a>
+    <a href="#">▶️ YouTube</a>
+  </div>
+</footer>
+
+<!-- CHAT -->
+<button class="chat-btn" id="chatOpen" aria-label="Fungua gumzo">💬</button>
+<div class="chat-box" id="chatBox" role="dialog" aria-label="Msaada wa haraka">
+  <div class="chat-header">Afyaclinic Live Help</div>
+  <div class="chat-body" id="chatBody">
+    <div class="msg bot">Habari! Naweza kukusaidiaje leo?</div>
+  </div>
+  <div class="chat-input">
+    <input id="chatInput" type="text" placeholder="Andika ujumbe..." />
+    <button id="chatSend">Tuma</button>
+  </div>
+</div>
+
+<script>
+  /* ---------- Dark Mode ---------- */
+  const darkBtn = document.getElementById('darkToggle');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if(localStorage.getItem('theme')==='dark' || (!localStorage.getItem('theme') && prefersDark)){
+    document.body.classList.add('dark');
+  }
+  darkBtn.addEventListener('click', ()=>{
+    document.body.classList.toggle('dark');
+    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark':'light');
+    darkBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  });
+  darkBtn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+
+  /* ---------- Smooth nav ---------- */
+  document.querySelectorAll('.nav-links a').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const id = a.getAttribute('href');
+      if(id && id.startsWith('#')){
+        e.preventDefault();
+        document.querySelector(id)?.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+  });
+
+  /* ---------- Hero background slideshow + text fade ---------- */
+  const hero = document.querySelector('.hero');
+  const headline = document.getElementById('headline');
+  const heroImages = [
+    "url('https://images.unsplash.com/photo-1584438784894-089d6a62b8d1?auto=format&fit=crop&w=1600&q=80')",
+    "url('https://images.unsplash.com/photo-1580281657521-9bfa0f1c57d2?auto=format&fit=crop&w=1600&q=80')",
+    "url('https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1600&q=80')"
+  ];
+  let hi = 0;
+  function setHero(bg){
+    hero.style.setProperty('--bgImg', bg);
+    hero.style.backgroundImage = bg; // fallback for older browsers
+    hero.style.setProperty('--dummy','1'); // no-op to force repaint on some engines
+    hero.style.setProperty('--transition','1');
+    hero.style.setProperty('--opacity','1');
+  }
+  function cycleHero(){
+    hero.style.setProperty('--transition','1');
+    hero.style.setProperty('--opacity','0'); // trigger fade (via ::before opacity if used)
+    hero.style.setProperty('opacity','1');
+    hero.style.setProperty('--bgImg', heroImages[hi]);
+    hero.style.setProperty('--transition','1');
+    // use ::before equivalent by swapping background via pseudo-swap technique
+    hero.style.setProperty('--bgImg', heroImages[hi]);
+    hero.style.setProperty('--dummy2', Math.random()); // force reflow
+    hero.style.setProperty('background-image', heroImages[hi]);
+    // pulse headline
+    headline.classList.remove('pulse');
+    void headline.offsetWidth; // restart animation
+    headline.classList.add('pulse');
+    hi = (hi+1)%heroImages.length;
+  }
+  // Initialize with CSS ::before replacement
+  (function initHero(){
+    // emulate ::before by overlaying via inline style on the section itself
+    const style = document.createElement('style');
+    style.textContent = `
+      .hero{background-image:${heroImages[0]}; background-size:cover; background-position:center; transition:background-image 0s}
+    `;
+    document.head.appendChild(style);
+    setInterval(cycleHero, 5000);
+  })();
+
+  /* ---------- Search filter (services + doctors + news) ---------- */
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
+  const filterables = [
+    ...document.querySelectorAll('#services .card'),
+    ...document.querySelectorAll('#doctors .card'),
+    ...document.querySelectorAll('#news .item')
+  ];
+  function runSearch(){
+    const q = (searchInput.value||'').toLowerCase().trim();
+    filterables.forEach(el=>{
+      const text = (el.textContent + ' ' + (el.dataset.keywords||'')).toLowerCase();
+      el.style.display = q==='' || text.includes(q) ? '' : 'none';
+    });
+  }
+  searchBtn.addEventListener('click', runSearch);
+  searchInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ runSearch(); } });
+
+  /* ---------- Newsletter ---------- */
+  const nlEmail = document.getElementById('nlEmail');
+  const nlBtn = document.getElementById('nlBtn');
+  const nlMsg = document.getElementById('nlMsg');
+  nlBtn.addEventListener('click', ()=>{
+    const v = (nlEmail.value||'').trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){
+      nlMsg.textContent = 'Tafadhali weka email sahihi.'; return;
+    }
+    nlMsg.textContent = 'Asante! Umejiunga na jarida.';
+    nlEmail.value = '';
+  });
+
+  /* ---------- Chat widget ---------- */
+  const chatOpen = document.getElementById('chatOpen');
+  const chatBox  = document.getElementById('chatBox');
+  const chatBody = document.getElementById('chatBody');
+  const chatInput= document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+
+  chatOpen.addEventListener('click', ()=>{
+    chatBox.style.display = chatBox.style.display==='flex' ? 'none' : 'flex';
+  });
+  function sendUser(msg){
+    if(!msg) return;
+    const p = document.createElement('div'); p.className='msg user'; p.textContent = msg; chatBody.appendChild(p);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    setTimeout(()=> {
+      const b = document.createElement('div'); b.className='msg bot';
+      b.textContent = 'Asante. Tuta-kuhudumia. Kwa miadi bofya “Book Appointment” ↑ au piga 112 kwa dharura.';
+      chatBody.appendChild(b);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }, 500);
+  }
+  chatSend.addEventListener('click', ()=> sendUser(chatInput.value.trim()));
+  chatInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ sendUser(chatInput.value.trim()); chatInput.value=''; } });
+
+</script>
+</body>
+</html>
+
